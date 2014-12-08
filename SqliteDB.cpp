@@ -300,13 +300,24 @@ void SqliteStatement::Finalize()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+//
+
+int SqliteStatement::GetBindParameterIndex(std::string col)
+{
+	return sqlite3_bind_parameter_index(_stmt, col.c_str());
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // Binds a wchar string to the given parameter. Empty strings are bound
 // as null
 
 void SqliteStatement::Bind(const char* param, const WCHAR* val)
 {
-	int col = sqlite3_bind_parameter_index(_stmt, param);
-	
+	Bind(GetBindParameterIndex(param), val);
+}
+
+void SqliteStatement::Bind(int col, const WCHAR* val)
+{
 	int res = SQLITE_OK;
 	if (val == NULL)
 	{
@@ -331,15 +342,17 @@ void SqliteStatement::Bind(const char* param, const WCHAR* val)
 
 void SqliteStatement::Bind(const char* param, const char *val)
 {
-	int col = sqlite3_bind_parameter_index(_stmt, param);
+	Bind(GetBindParameterIndex(param), val);
+}
 
+void SqliteStatement::Bind(int col, const char *val)
+{
 	int res = SQLITE_OK;
 	if (val == NULL)
 	{
 		res = sqlite3_bind_null(_stmt, col);
 	}
-	else
-	if (strlen(val) == 0)
+	else if (strlen(val) == 0)
 	{
 		res = sqlite3_bind_null(_stmt, col);
 	}
@@ -356,11 +369,14 @@ void SqliteStatement::Bind(const char* param, const char *val)
 // Bind an integer to the given parameter. If optional "bool null" is true,
 // null is bound. Use like this: stmt.Bind("col", var, var == 0);
 
-void SqliteStatement::Bind(const char* param, const int val, bool null)
+void SqliteStatement::Bind(const char* param, int val, bool null)
 {
-	int col = sqlite3_bind_parameter_index(_stmt, param);
-	int res = (null ? sqlite3_bind_null(_stmt, col) : sqlite3_bind_int(_stmt, col, val));
+	Bind(GetBindParameterIndex(param), val, null);
+}
 
+void SqliteStatement::Bind(int col, int val, bool null)
+{
+	int res = (null ? sqlite3_bind_null(_stmt, col) : sqlite3_bind_int(_stmt, col, val));
 	if (res != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
@@ -368,12 +384,14 @@ void SqliteStatement::Bind(const char* param, const int val, bool null)
 /////////////////////////////////////////////////////////////////////////////
 // Binds 1 for true and 0 for false to the given parameter
 
-void SqliteStatement::Bind(const char* param, const bool val)
+void SqliteStatement::Bind(const char* param, bool val)
 {
-	int col = sqlite3_bind_parameter_index(_stmt, param);
-	int res = sqlite3_bind_int(_stmt, col, val ? 1 : 0);
+	Bind(GetBindParameterIndex(param), val);
+}
 
-	if (res != SQLITE_OK)
+void SqliteStatement::Bind(int col, bool val)
+{
+	if (sqlite3_bind_int(_stmt, col, val ? 1 : 0) != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
 
@@ -382,10 +400,12 @@ void SqliteStatement::Bind(const char* param, const bool val)
 
 void SqliteStatement::Bind(const char* param)
 {
-	int col = sqlite3_bind_parameter_index(_stmt, param);
-	int res = sqlite3_bind_null(_stmt, col);
+	Bind(GetBindParameterIndex(param));
+}
 
-	if (res != SQLITE_OK)
+void SqliteStatement::Bind(int col)
+{
+	if (sqlite3_bind_null(_stmt, col) != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
 
@@ -394,12 +414,17 @@ void SqliteStatement::Bind(const char* param)
 
 void SqliteStatement::ResolveColumnNames()
 {
-	for (int i = 0; i < sqlite3_column_count(_stmt); i++)
+	for (int i = 0; i < GetColumnCount(); i++)
 		_colNames[sqlite3_column_name(_stmt, i)] =  i;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
+
+int SqliteStatement::GetColumnCount()
+{
+	return sqlite3_column_count(_stmt);
+}
 
 std::string SqliteStatement::GetTextColumn(int col)
 {

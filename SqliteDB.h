@@ -95,6 +95,7 @@ public:
 	bool GetNextRecord();
 	void Finalize();
 
+	int GetColumnCount();
 	std::string GetTextColumn(int col);
 	std::string GetTextColumn(std::string col);
 	std::wstring GetWTextColumn(int col);
@@ -103,12 +104,19 @@ public:
 	int GetIntColumn(std::string col);
 	bool GetBoolColumn(int col);
 	bool GetBoolColumn(std::string col);
+	int GetBindParameterIndex(std::string col);
 
 	void Bind(const char* param, const WCHAR* val);
 	void Bind(const char* param, const char *val);
-	void Bind(const char* param, const int val, bool null = false);
-	void Bind(const char* param, const bool val);
+	void Bind(const char* param, int val, bool null = false);
+	void Bind(const char* param, bool val);
 	void Bind(const char* param);
+
+	void Bind(int col, const WCHAR* val);
+	void Bind(int col, const char *val);
+	void Bind(int col, int val, bool null = false);
+	void Bind(int col, bool val);
+	void Bind(int col);
 
 protected:
 	void ResolveColumnNames();
