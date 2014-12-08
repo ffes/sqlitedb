@@ -60,8 +60,8 @@ public:
 	void Delete();
 	void Vacuum();
 
-	void Attach(LPCWSTR file, LPCWSTR name);
-	void Detach(LPCWSTR name);
+	void Attach(LPCWSTR file, LPCWSTR alias);
+	void Detach(LPCWSTR alias);
 
 	void SetFilename(LPCWSTR file);
 	void SetUserVersion(long version);

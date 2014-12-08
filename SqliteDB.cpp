@@ -123,6 +123,29 @@ void SqliteDatabase::Delete()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+//
+
+void SqliteDatabase::Attach(LPCWSTR file, LPCWSTR alias)
+{
+	SqliteStatement stmt(this, "ATTACH DATABASE @file AS @alias");
+	stmt.Bind("@file", file);
+	stmt.Bind("@alias", alias);
+	stmt.SaveRecord();
+	stmt.Finalize();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+void SqliteDatabase::Detach(LPCWSTR alias)
+{
+	SqliteStatement stmt(this, "DETACH DATABASE @alias");
+	stmt.Bind("@alias", alias);
+	stmt.SaveRecord();
+	stmt.Finalize();
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // Compress the database
 
 void SqliteDatabase::Vacuum()
