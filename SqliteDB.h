@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // SqliteDB Classes                                                        //
-// Version 1.1, 27-May-2015                                                //
+// Version 1.1, 16-Nov-2015                                                //
 //                                                                         //
 // Copyright (c) 2013-2015, Frank Fesevur <http://www.fesevur.com>         //
 // All rights reserved.                                                    //
@@ -91,6 +91,7 @@ public:
 	virtual ~SqliteStatement();
 
 	void Prepare(const char* sql);
+	void Reset();
 	void SaveRecord();
 	bool GetNextRecord();
 	void Finalize();

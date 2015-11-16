@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // SqliteDB Classes                                                        //
-// Version 1.1, 27-May-2015                                                //
+// Version 1.1, 16-Nov-2015                                                //
 //                                                                         //
 // Copyright (c) 2013-2015, Frank Fesevur <http://www.fesevur.com>         //
 // All rights reserved.                                                    //
@@ -263,13 +263,21 @@ void SqliteStatement::Prepare(const char* sql)
 /////////////////////////////////////////////////////////////////////////////
 //
 
+void SqliteStatement::Reset()
+{
+	if (sqlite3_reset(_stmt) != SQLITE_OK)
+		throw SqliteException(sqlite3_errmsg(_db));
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
 void SqliteStatement::SaveRecord()
 {
 	if (sqlite3_step(_stmt) != SQLITE_DONE)
 		throw SqliteException(sqlite3_errmsg(_db));
 
-	if (sqlite3_reset(_stmt) != SQLITE_OK)
-		throw SqliteException(sqlite3_errmsg(_db));
+	Reset();
 }
 
 /////////////////////////////////////////////////////////////////////////////
