@@ -1,13 +1,4 @@
-__*
-*.LNK
-*.lnk
-*.suo
-*.ncb
-*.user
-*.opensdf
-*.sdf
+.vs/
 [Rr]elease/
 [Dd]ebug/
-ipch/
-*.deps
-tags.sqlite
+*.user
