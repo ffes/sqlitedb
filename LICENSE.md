@@ -1,5 +1,6 @@
-
 SqliteDatabase Classes
+======================
+
 Version 1.0.0, 18-Sep-2013
 
 Copyright (c) 2013, Frank Fesevur <http://www.fesevur.com>
