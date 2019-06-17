@@ -3,3 +3,5 @@
 [Dd]ebug/
 *.user
 sqlite3.*
+docs/_build
+docs/Pipfile.lock
