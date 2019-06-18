@@ -2,6 +2,7 @@
 [Rr]elease/
 [Dd]ebug/
 *.user
+*.sqlite
 sqlite3.*
 docs/_build
 docs/Pipfile.lock
