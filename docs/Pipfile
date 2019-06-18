@@ -9,6 +9,7 @@ verify_ssl = true
 sphinx = "*"
 sphinx_rtd_theme = "*"
 breathe = "*"
+recommonmark = "*"
 
 [requires]
 python_version = "3.6"

@@ -1,7 +1,7 @@
-SqliteDatabase Classes
-======================
+Changelog
+=========
 
-Version 1.1.0, XX-Dec-2014
+Version 1.1.0, 08-Dec-2014
 --------------------------
 
 - Added Attach() and Detach()
